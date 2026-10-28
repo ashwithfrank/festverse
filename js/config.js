@@ -33,7 +33,7 @@ export const CONFIG = {
 
   // --- Branding ------------------------------------------------------------
   fest: {
-    name: 'FESTVERSE', // replace with the real fest name
+    name: 'ANVAYA 2k26', // replace with the real fest name
     logo: 'assets/images/logo.svg', // path relative to the site root; a missing file is fine
   },
 
