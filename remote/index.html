@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#070707">
+  <!-- Site root relative to /remote/ (base-path-safe: works on user sites and repo sites). -->
+  <meta name="festverse-root" content="../">
+  <title>FestVerse Remote</title>
+  <link rel="icon" href="../assets/images/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Montserrat:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/remote.css">
+</head>
+<body class="remote" data-route="remote">
+  <div class="bg" aria-hidden="true"></div>
+
+  <main class="console">
+    <header class="brand">
+      <img id="logo" class="brand-logo" alt="" hidden>
+      <h1 id="festName">FESTVERSE</h1>
+      <p class="sub">INAUGURATION CONTROL CENTER</p>
+    </header>
+
+    <section class="status" aria-label="Connection status">
+      <div id="pillLink" class="pill" data-state="warn"><i></i><span>Connecting&hellip;</span></div>
+      <div id="pillDisplay" class="pill" data-state="warn"><i></i><span>Display: not detected</span></div>
+    </section>
+    <p id="clockWarn" class="warn" role="alert" hidden></p>
+
+    <section class="hero">
+      <button id="mainBtn" class="launch" type="button" data-state="disabled" disabled>
+        <span class="ring" aria-hidden="true"></span>
+        <span id="mainLabel" class="launch-label">INAUGURATE FEST</span>
+      </button>
+
+      <div id="banner" class="banner" data-kind="idle" role="status" aria-live="polite">
+        <strong id="bannerTitle">READY WHEN YOU ARE</strong>
+        <span id="bannerText">Enter the control passcode below, wait for both indicators to turn green, then press the button.</span>
+      </div>
+      <button id="resendBtn" class="outline" type="button" hidden>RESEND SIGNAL</button>
+    </section>
+
+    <hr class="sep">
+
+    <section class="test-block" aria-label="Rehearsal">
+      <button id="testBtn" class="outline" type="button" disabled>TEST ANIMATION</button>
+      <p id="testNote" class="note">Plays a clearly labelled rehearsal on the display. It never counts as the inauguration.</p>
+    </section>
+
+    <details id="passPanel" class="panel">
+      <summary>Control passcode</summary>
+      <form id="passForm" autocomplete="off">
+        <p class="note">Signs every message so strangers cannot trigger the screen. Use the same passcode on the display PC. It is stored only on this phone.</p>
+        <div class="pass-row">
+          <input id="passInput" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Passcode" aria-label="Control passcode">
+          <button id="passSave" class="outline small" type="submit">SAVE</button>
+        </div>
+        <p id="passMsg" class="note"></p>
+      </form>
+    </details>
+
+    <section id="rehearsal" class="panel danger" hidden>
+      <h2>Rehearsal tools</h2>
+      <p class="note">Only for practice runs. This returns the display to black and re-arms the button; the old record is kept in the display's log.</p>
+      <button id="resetBtn" class="outline danger-btn" type="button" disabled>RESET FOR REHEARSAL</button>
+    </section>
+
+    <footer class="foot">
+      <span id="footInfo">&nbsp;</span>
+    </footer>
+  </main>
+
+  <dialog id="confirmDialog" aria-labelledby="confirmTitle">
+    <h2 id="confirmTitle">Inaugurate the fest?</h2>
+    <p>This will immediately launch the inauguration animation on the main display and announce the fest as officially inaugurated.</p>
+    <p id="confirmWarn" class="warn" hidden></p>
+    <div class="dialog-actions">
+      <button id="confirmNo" class="outline" type="button">CANCEL</button>
+      <button id="confirmYes" class="gold-btn" type="button">CONFIRM</button>
+    </div>
+  </dialog>
+
+  <dialog id="resetDialog" aria-labelledby="resetTitle">
+    <h2 id="resetTitle">Reset for rehearsal?</h2>
+    <p>The display returns to black and the inauguration can be triggered again. <strong>Never use this during the real ceremony.</strong></p>
+    <label for="resetInput" class="note">Type RESET to confirm</label>
+    <input id="resetInput" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false">
+    <div class="dialog-actions">
+      <button id="resetNo" class="outline" type="button">CANCEL</button>
+      <button id="resetYes" class="gold-btn" type="button" disabled>RESET</button>
+    </div>
+  </dialog>
+
+  <noscript><p style="color:#aaa;padding:16px">FestVerse needs JavaScript.</p></noscript>
+  <script type="module" src="../js/remote.js"></script>
+</body>
+</html>

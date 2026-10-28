@@ -1,0 +1,85 @@
+/* Cinematic sequence (~8 s at --speed: 1). All timings scale with --speed.
+   Timeline (seconds):
+     0.0  amber glow blooms          0.5/1.2/1.9  light rings expand
+     3.1  big ring + soft flash + particle burst (sound "boom")
+     2.7  logo rises                 3.6  fest name
+     4.6  primary announcement       5.8  divider
+     6.0  "LET THE FEST BEGIN!"      6.9  subtitle                 ~8.0 done
+   Animations use transform/opacity (plus one clip-path wipe) so they stay smooth on
+   ordinary PCs. Every end state equals the static "final" state below. */
+
+#stage[data-state="playing"] .glow {
+  animation:
+    glowIn calc(1.8s * var(--speed)) cubic-bezier(0.2, 0.7, 0.2, 1) forwards,
+    glowBreath calc(7s * var(--speed)) ease-in-out calc(4s * var(--speed)) infinite;
+}
+#stage[data-state="playing"] .rings i { animation: ringOut calc(2.6s * var(--speed)) cubic-bezier(0.15, 0.6, 0.3, 1) both; }
+#stage[data-state="playing"] .rings i:nth-child(1) { animation-delay: calc(0.5s * var(--speed)); }
+#stage[data-state="playing"] .rings i:nth-child(2) { animation-delay: calc(1.2s * var(--speed)); }
+#stage[data-state="playing"] .rings i:nth-child(3) { animation-delay: calc(1.9s * var(--speed)); }
+#stage[data-state="playing"] .rings i.big { animation-delay: calc(3.1s * var(--speed)); animation-duration: calc(3s * var(--speed)); }
+#stage[data-state="playing"] .flash { animation: flashPulse calc(1.1s * var(--speed)) ease-out calc(3.1s * var(--speed)) both; }
+
+#stage[data-state="playing"] .logo { animation: logoIn calc(1.5s * var(--speed)) cubic-bezier(0.2, 0.8, 0.2, 1) calc(2.7s * var(--speed)) both; }
+#stage[data-state="playing"] .fest-name { animation: riseIn calc(1.3s * var(--speed)) ease-out calc(3.6s * var(--speed)) both; }
+#stage[data-state="playing"] .primary {
+  animation:
+    primaryIn calc(1.7s * var(--speed)) cubic-bezier(0.2, 0.8, 0.2, 1) calc(4.6s * var(--speed)) both,
+    shimmer 6s ease-in-out calc(6.5s * var(--speed)) infinite alternate;
+}
+#stage[data-state="playing"] .divider { animation: dividerIn calc(0.9s * var(--speed)) ease-out calc(5.8s * var(--speed)) both; }
+#stage[data-state="playing"] .secondary { animation: popIn calc(1s * var(--speed)) cubic-bezier(0.2, 1.1, 0.3, 1) calc(6s * var(--speed)) both; }
+#stage[data-state="playing"] .subtitle { animation: riseIn calc(1.2s * var(--speed)) ease-out calc(6.9s * var(--speed)) both; }
+
+/* Static final state: used after a page refresh (no animation is replayed). */
+#stage[data-state="final"] .glow { opacity: 0.85; transform: translate(-50%, -50%) scale(1); }
+#stage[data-state="final"] .logo,
+#stage[data-state="final"] .fest-name,
+#stage[data-state="final"] .secondary,
+#stage[data-state="final"] .subtitle { opacity: 1; }
+#stage[data-state="final"] .primary { opacity: 1; animation: shimmer 6s ease-in-out infinite alternate; }
+#stage[data-state="final"] .divider { opacity: 1; transform: none; }
+
+@keyframes glowIn {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+  to { opacity: 0.85; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes glowBreath {
+  0%, 100% { opacity: 0.85; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+@keyframes ringOut {
+  0% { opacity: 0; transform: scale(0.05); }
+  15% { opacity: 0.9; }
+  100% { opacity: 0; transform: scale(2.6); }
+}
+@keyframes flashPulse {
+  0% { opacity: 0; }
+  18% { opacity: 0.55; }
+  100% { opacity: 0; }
+}
+@keyframes logoIn {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(2.2vh); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes primaryIn {
+  from { opacity: 0; transform: translateY(3.5vh) scale(1.07); clip-path: inset(-30% 50% -30% 50%); }
+  to { opacity: 1; transform: none; clip-path: inset(-30% -10% -30% -10%); }
+}
+@keyframes dividerIn {
+  from { opacity: 0; transform: scaleX(0); }
+  to { opacity: 1; transform: scaleX(1); }
+}
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.82); }
+  70% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes shimmer {
+  from { background-position: 0% 0; }
+  to { background-position: 100% 0; }
+}

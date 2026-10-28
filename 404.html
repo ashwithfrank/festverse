@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>FestVerse</title>
+  <style>
+    html,body{margin:0;height:100%;background:#000;color:#f5f1e6;font:16px/1.6 system-ui,"Segoe UI",Roboto,sans-serif}
+    main{min-height:100%;display:grid;place-content:center;text-align:center;padding:24px}
+    h1{margin:0 0 8px;letter-spacing:.3em;color:#d4af37;font-weight:600}
+    a{color:#f6e27a}
+    p{margin:6px 0;color:#bbb}
+  </style>
+</head>
+<body>
+  <main>
+    <h1>FESTVERSE</h1>
+    <p>That address does not exist.</p>
+    <p><a id="goDisplay" href="./">Main display</a> &nbsp;&middot;&nbsp; <a id="goRemote" href="remote/">Remote controller</a></p>
+  </main>
+  <!-- Tiny inline script on purpose: a 404 page is served from arbitrary depths, so it cannot use relative module paths. -->
+  <script>
+    (function () {
+      var parts = location.pathname.split('/');
+      var i = parts.indexOf('remote');
+      // e.g. /repo/remote/foo  ->  /repo/remote/   (keeps the public route /remote working)
+      if (i > -1) { location.replace(parts.slice(0, i + 1).join('/') + '/'); return; }
+      // Best guess at the site root for the two links (repository sites live under /<repo>/).
+      var base = '/';
+      if (/\.github\.io$/i.test(location.hostname) && parts[1]) base = '/' + parts[1] + '/';
+      document.getElementById('goDisplay').href = base;
+      document.getElementById('goRemote').href = base + 'remote/';
+    })();
+  </script>
+</body>
+</html>
