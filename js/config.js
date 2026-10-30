@@ -57,7 +57,7 @@ export const CONFIG = {
     particles: 160, // size of the golden burst; lower it (e.g. 80) for a weak PC
     testHoldSeconds: 6, // how long a TEST animation stays before fading back to black
     revealAt: 32,
-    testRevealAt: null1,
+    testRevealAt: null,
   },
 
   audio: {
