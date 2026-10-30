@@ -12,8 +12,7 @@ const stage = $('stage');
 const setup = $('setup');
 const params = new URLSearchParams(location.search);
 
-const TOTAL_SECONDS = 8.0; // matches animations.css
-const BURST_SECONDS = 3.2; // moment of the "boom" and particle burst
+const TOTAL_SECONDS = 5.0; // length of the reveal part (after revealAt); matches animations.css
 const speed = Math.max(0.2, Number(CONFIG.animation.speed) || 1);
 
 /* ------------------------------------------------------------------ content */
@@ -197,7 +196,7 @@ function syncAudioPresence() {
   renderSetup();
 }
 
-function playSound() {
+function playSound(revealAt = 0) {
   if (!CONFIG.audio.enabled) return null;
   try {
     if (audioEl) {
@@ -212,7 +211,8 @@ function playSound() {
     }
     if (ctx.state !== 'running') ctx.resume().catch(() => {});
     const vol = Math.min(1, Math.max(0, CONFIG.audio.volume));
-    const t0 = ctx.currentTime + 0.08;
+    // Built-in sound: its impact is 3.1 s into the track, so start it late enough to land on revealAt.
+    const t0 = ctx.currentTime + 0.08 + Math.max(0, revealAt - 3.1 * speed);
     const at = (x) => t0 + x * speed;
     const master = ctx.createGain();
     master.gain.value = vol;
@@ -326,22 +326,33 @@ function showFinalStatic() {
   startParticles(14);
 }
 
+// Seconds from the start of the sound until the big reveal (flash, burst, names, announcement).
+// Until then the ripple animation loops. 0 = reveal immediately (old behaviour).
+function revealDelay(test) {
+  const cfg = CONFIG.animation;
+  const v = test && cfg.testRevealAt != null ? Number(cfg.testRevealAt) : Number(cfg.revealAt);
+  return Number.isFinite(v) && v > 0 ? v : 0;
+}
+
 function startAnimation({ test }) {
   blackout();
   $('badge').hidden = !test;
+  const revealAt = revealDelay(test);
+  stage.dataset.phase = revealAt > 0 ? 'wait' : 'reveal';
   void stage.offsetWidth; // restart CSS animations from zero
   stage.dataset.state = 'playing';
   run = { timers: [], test, sound: null };
-  run.sound = playSound();
+  run.sound = playSound(revealAt);
   startParticles(16);
-  after(BURST_SECONDS * speed * 1000, () => {
+  after((revealAt + 0.1 * speed) * 1000, () => {
     burst(Math.max(20, Number(CONFIG.animation.particles) || 160));
     emitRate = 40;
   });
-  after(TOTAL_SECONDS * speed * 1000, () => { emitRate = 18; });
+  if (revealAt > 0) after(revealAt * 1000, () => { stage.dataset.phase = 'reveal'; });
+  after((revealAt + TOTAL_SECONDS * speed) * 1000, () => { emitRate = 18; });
   if (test) {
     const hold = Math.max(2, Number(CONFIG.animation.testHoldSeconds) || 6);
-    after((TOTAL_SECONDS * speed + hold) * 1000, () => {
+    after((revealAt + TOTAL_SECONDS * speed + hold) * 1000, () => {
       stage.classList.add('fade-out');
       after(1400, () => { if (!official) blackout(); });
     });
