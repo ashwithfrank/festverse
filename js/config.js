@@ -62,7 +62,7 @@ export const CONFIG = {
     enabled: true,
     // '' = built-in synthesized cinematic sound (no file needed).
     // Or set e.g. 'assets/audio/inauguration.mp3' to use your own file.
-    file: '',
+    file: 'assets/audio/audio.mp3',
     volume: 0.85, // 0 – 1
   },
 
