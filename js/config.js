@@ -56,6 +56,8 @@ export const CONFIG = {
     speed: 1, // 1 = about 8 seconds. 1.25 = slower / longer, 0.8 = faster.
     particles: 160, // size of the golden burst; lower it (e.g. 80) for a weak PC
     testHoldSeconds: 6, // how long a TEST animation stays before fading back to black
+    revealAt: 32,
+    testRevealAt: 32,
   },
 
   audio: {
